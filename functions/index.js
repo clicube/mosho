@@ -1,6 +1,7 @@
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 const express = require('express')
+const cors = require('cors')
 const auth = require('basic-auth')
 
 admin.initializeApp(functions.config().firebase)
@@ -9,6 +10,7 @@ const envsRef = db.collection('envs')
 
 const expressApp = (() => {
   const app = express()
+  app.use(cors())
 
   const basicAuth = (req, res, next) => {
     const [name, pass] = functions.config().mosho.basicauth.split(':')
@@ -69,4 +71,4 @@ const expressApp = (() => {
 })()
 
 // Expose Express API as a single Cloud Function:
-exports.api = functions.region('asia-northeast1').https.onRequest(expressApp)
+exports.api = functions.runWith({ timeoutSeconds: 10 }).region('asia-northeast1').https.onRequest(expressApp)

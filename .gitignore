@@ -113,7 +113,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-
+.firebase/
 .firebaserc
 .idea/
 *.iml
+.DS_Store
