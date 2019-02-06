@@ -12,6 +12,7 @@
     "basic-auth": "^2.0.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-promise-router": "^3.0.3",
     "firebase-admin": "^7.0.0",
     "firebase-functions": "^2.2.0"
   },
