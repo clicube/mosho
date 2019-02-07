@@ -7,18 +7,16 @@ module.exports = (config) => {
       if (user && user.name === config.name && user.pass === config.pass) {
         return next()
       } else {
-        return res.status(401).
-          send({ result: 'NG', message: 'Unauthorized' })
+        return res.status(401)
+          .send({ result: 'NG', message: 'Unauthorized' })
       }
     },
     passcodeOrBasicAuth: (req, res, next) => {
       if (req.body.passcode === config.passcode) {
         return next()
       } else {
-        return basicAuth(req, res, next)
+        return this.basicAuth(req, res, next)
       }
-    },
+    }
   }
 }
-
-

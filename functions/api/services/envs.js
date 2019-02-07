@@ -2,10 +2,10 @@
 module.exports = (repository) => {
   return {
     getLatest: async () => {
-      return await repository.getLatest()
+      return repository.getLatest()
     },
     put: async (env) => {
-      return await repository.put(env)
-    },
+      return repository.put(env)
+    }
   }
 }

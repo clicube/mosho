@@ -17,7 +17,7 @@ const authConfig = (() => {
   return {
     name: name,
     pass: pass,
-    passcode: passcode,
+    passcode: passcode
   }
 })()
 
@@ -32,4 +32,3 @@ app.use(cors())
 app.use('/v1/envs', envs)
 
 module.exports = app
-

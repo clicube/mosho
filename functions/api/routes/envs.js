@@ -13,7 +13,7 @@ module.exports = (service, authConfig) => {
       time: Number(req.body.time),
       temperature: Number(req.body.temperature),
       humidity: Number(req.body.humidity),
-      brightness: Number(req.body.brightness),
+      brightness: Number(req.body.brightness)
     }
     const err = []
     for (let key of Object.keys(docData)) {
@@ -25,7 +25,7 @@ module.exports = (service, authConfig) => {
       err.unshift('Bad Request')
       return res.status(400).send({ status: 'NG', message: err.join(', ') })
     }
-    return await service.put(docData)
+    return service.put(docData)
   })
 
   return router

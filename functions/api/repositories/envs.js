@@ -13,6 +13,6 @@ module.exports = (db) => {
     put: async (env) => {
       await envsRef.add(env)
       return env
-    },
+    }
   }
 }
