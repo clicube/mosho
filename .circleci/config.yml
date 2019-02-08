@@ -21,6 +21,7 @@ jobs:
             - ~/.npm
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run: npm run test
+      - run: npm run lint
 
   dev-deploy:
     docker:
