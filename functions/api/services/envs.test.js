@@ -1,10 +1,13 @@
 /* eslint-env jest */
+'use strict'
 const envs = require('./envs')
 
-test('getLatest_returns_repository#getLatest_result', async () => {
+test('getLatest() returns latest data from repository', async () => {
   // arrange
   const mockRepo = {
-    getLatest: jest.fn().mockReturnValue('latestData')
+    getLatest: async () => {
+      return 'latestData'
+    }
   }
   const sut = envs(mockRepo)
 
@@ -15,12 +18,12 @@ test('getLatest_returns_repository#getLatest_result', async () => {
   expect(result).toBe('latestData')
 })
 
-test('getLatest_passes_repository#getLatest_error', async () => {
+test('getLatest() raises error when repository occurs error', async () => {
   // arrange
   const mockRepo = {
-    getLatest: jest.fn().mockImplementation(async () => {
+    getLatest: async () => {
       throw new Error()
-    })
+    }
   }
   const sut = envs(mockRepo)
 

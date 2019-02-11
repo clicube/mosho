@@ -5,7 +5,7 @@ module.exports = (service, authConfig) => {
 
   router.get('/latest', async (req, res) => {
     const env = await service.getLatest()
-    res.send(env)
+    res.json(env)
   })
 
   router.post('/', auth.basicAuth, async (req, res) => {

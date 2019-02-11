@@ -23,6 +23,7 @@
   "devDependencies": {
     "firebase-tools": "^6.3.1",
     "jest": "^24.1.0",
-    "standard": "^12.0.1"
+    "standard": "^12.0.1",
+    "supertest": "^3.4.2"
   }
 }
