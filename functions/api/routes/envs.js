@@ -23,7 +23,7 @@ module.exports = (service, authConfig) => {
     }
     if (err.length > 0) {
       err.unshift('Bad Request')
-      return res.status(400).send({ status: 'NG', message: err.join(', ') })
+      return res.status(400).send({ result: 'NG', message: err.join(', ') })
     }
     const result = await service.put(docData)
     return res.json(result)

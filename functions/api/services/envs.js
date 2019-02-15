@@ -1,11 +1,7 @@
 'use strict'
 module.exports = (repository) => {
   return {
-    getLatest: async () => {
-      return repository.getLatest()
-    },
-    put: async (env) => {
-      return repository.put(env)
-    }
+    getLatest: async () => repository.getLatest(),
+    put: async (env) => repository.put(env)
   }
 }
