@@ -25,7 +25,8 @@ module.exports = (service, authConfig) => {
       err.unshift('Bad Request')
       return res.status(400).send({ status: 'NG', message: err.join(', ') })
     }
-    return service.put(docData)
+    const result = await service.put(docData)
+    return res.json(result)
   })
 
   return router
