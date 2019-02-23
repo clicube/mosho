@@ -1,65 +1,158 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/5.8.2/firebase-app.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/5.8.2/firebase-auth.js"></script>
-    <script defer src="/__/firebase/5.8.2/firebase-database.js"></script>
-    <script defer src="/__/firebase/5.8.2/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/5.8.2/firebase-storage.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Mosho</title>
+  <meta charset="utf-8">
+  <link rel="apple-touch-icon-precomposed" href="/icon256.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.4.min.js"></script>
+  <link href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pulltorefreshjs/0.1.14/pulltorefresh.min.js"></script>
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    html,
+    body {
+      height: 100%;
+    }
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+      font-size: Large;
 
-        try {
-          let app = firebase.app();
-          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-        }
+    }
+
+    body.light {
+      color: #222;
+      background: #69d;
+      background: -moz-linear-gradient(top center, #9df 0%, #69d 100%);
+      background: -webkit-gradient(linear, center top, center bottom, from(#9df), to(#69d));
+      background: linear-gradient(top center, #9df 0%, #69d 100%);
+    }
+
+    body.dark {
+      color: #ddd;
+      background: #024;
+      background: -moz-linear-gradient(top center, #268 0%, #024 100%);
+      background: -webkit-gradient(linear, center top, center bottom, from(#268), to(#024));
+      background: linear-gradient(top center, #268 0%, #024 100%);
+    }
+
+    p#temp,
+    p#hum {
+      padding: 10px 30px;
+      font-size: 48pt;
+    }
+
+    #result {
+      font-size: 24px;
+      margin: 30px 0;
+    }
+
+  </style>
+  <script>
+    $(function () {
+      var baseurl = 'https://asia-northeast1-mosho-166cd.cloudfunctions.net';
+
+      PullToRefresh.init({
+        mainElement: 'body',
+        onRefresh: function(){ window.location.reload(); }
       });
-    </script>
-  </body>
+
+      $.get(baseurl + '/api/v1/envs/latest', null, function(data) {
+        console.log(data);
+        $('#temp').html(data.temperature + ' &deg;C');
+        $('#hum').html(data.humidity + ' %');
+        if(data.brightness > 15) {
+          $('body').addClass('light')
+        } else {
+          $('body').addClass('dark')
+        }
+      })
+
+      $('#passcodeModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        $('#sendButton').data('command', button.data('command'));
+      });
+      $('#passcodeModal').on('shown.bs.modal', function (event) {
+        $('#passcode').focus();
+      });
+      $('#sendButton').click(function (event) {
+        var button = $(event.target);
+        var command = button.data('command');
+        var passcode = $('#passcode').val();
+        if (passcode.length == 0) { return; }
+
+        $.post(baseurl + '/api/v1/ac/commands', {
+          'command': command,
+          'passcode': passcode
+        }, function () {
+          var msg = $('<p><span class="label label-success">OK</span></p>');
+          $('#result').append(msg)
+          setTimeout(function () {
+            msg.remove();
+          }, 5000);
+        });
+
+        $('#passcodeModal').modal('hide');
+      });
+      $(document).ajaxError(function () {
+        var msg = $('<p><span class="label label-danger">something wrong...</span></p>');
+        $('#result').append(msg)
+        setTimeout(function () {
+          msg.remove();
+        }, 5000);
+      });
+    });
+  </script>
+</head>
+
+<body class="text-center">
+  <div id="status">
+    <p id="temp">-- &deg;C</p>
+    <p id="hum">-- %</p>
+  </div>
+  <div id="control" class="text-center">
+    <h2>エアコン</h2>
+    <div class="btn-group btn-group-lg" role="group" aria-label="air">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="air-on">自動</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="air-off">オフ</button>
+    </div>
+    <h2>ライト</h2>
+    <div class="btn-group btn-group-lg" role="group" aria-label="light">
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="light-on-full">全光</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="light-on-scene">シーン</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="light-off">オフ</button>
+    </div>
+    <div id="result"></div>
+  </div>
+  <div class="modal" id="passcodeModal" tabindex="-1" role="dialog" aria-labelledby="passcodeModalLabel" aria-hidden="true" data-show="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&#215;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title">Enter Passcode</h4>
+        </div><!-- /modal-header -->
+        <div class="modal-body">
+          <input type="text" class="form-control" id="passcode" placeholder="Passcode" pattern="\d*" inputmode="numeric">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="sendButton">Send</button>
+        </div>
+      </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+  </div> <!-- /.modal -->
+</body>
+
 </html>
