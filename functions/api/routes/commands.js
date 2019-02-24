@@ -19,8 +19,8 @@ module.exports = (service, authConfig) => {
     return res.json(result)
   })
 
-  router.delete('/:id', auth.passcodeOrBasicAuth, async (req, res) => {
-    await service.delete(req.param('id'))
+  router.delete('/:id', auth.basicAuth, async (req, res) => {
+    await service.delete(Number(req.param('id')))
     return res.json({ result: 'OK' })
   })
 
