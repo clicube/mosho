@@ -24,7 +24,7 @@ const kickScript = () => {
   }
 }
 
-var unsub = () => {};
+var unsub = () => {}
 const startSession = () => {
   unsub = query.onSnapshot(querySnapshot => {
     const newCount = querySnapshot.size
