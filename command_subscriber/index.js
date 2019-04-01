@@ -6,6 +6,8 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 })
 
+admin.firestore.setLogFunction((log) => console.log(log))
+
 const db = admin.firestore()
 const query = db.collection('commands')
 
