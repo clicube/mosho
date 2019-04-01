@@ -24,21 +24,17 @@ const kickScript = () => {
   }
 }
 
-var unsub = () => {}
-const startSession = () => {
-  unsub = query.onSnapshot(querySnapshot => {
-    const newCount = querySnapshot.size
-    console.log('command count: ' + newCount)
-    if (prevCount < newCount) {
-      kickScript()
-    }
-    prevCount = newCount
-  }, err => {
-    console.log(`Encountered error: ${ err }`)
-  })
-}
+const unsub = query.onSnapshot(querySnapshot => {
+  const newCount = querySnapshot.size
+  console.log('command count: ' + newCount)
+  if (prevCount < newCount) {
+    kickScript()
+  }
+  prevCount = newCount
+}, err => {
+  console.log(`Encountered error: ${err}`)
+})
 
-setInterval(() => {
+setTimeout(() => {
   unsub()
-  startSession()
 }, 60 * 60 * 1000)
