@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "forever start -l /var/log/mosho_command_subscriber.log -a index.js",
+    "start": "forever start -l /var/log/mosho/command_subscriber.log -a index.js",
     "restart": "forever restart",
     "stop": "forever stop index.js"
   },
