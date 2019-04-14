@@ -1,0 +1,15 @@
+[Unit]
+Description=mosho command subscriber
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/node /home/pi/services/mosho/command_subscriber/index.js
+WorkingDirectory=/home/pi/services/mosho/command_subscriber
+KillMode=process
+Restart=always
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
