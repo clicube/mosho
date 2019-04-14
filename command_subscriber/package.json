@@ -3,15 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "forever start -l /var/log/mosho/command_subscriber.log -a index.js",
-    "restart": "forever restart",
-    "stop": "forever stop index.js"
-  },
+  "scripts": {},
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "firebase-admin": "^7.1.1",
-    "forever": "^0.15.4"
+    "firebase-admin": "^7.1.1"
   }
 }
