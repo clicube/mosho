@@ -16,15 +16,16 @@ const commands = (() => {
 const { smarthome } = require('actions-on-google')
 const app = smarthome()
 
+const util = require('util')
+
 const devices = [
   {
     id: '1',
     type: 'action.devices.types.LIGHT',
     traits: [
-      'action.devices.traits.OnOff'
-      // 'action.devices.traits.Brightness',
-      // 'action.devices.traits.ColorTemperature',
-      // 'action.devices.traits.ColorSpectrum'
+      'action.devices.traits.OnOff',
+      'action.devices.traits.Brightness',
+      'action.devices.traits.ColorSetting'
     ],
     name: {
       name: 'リビングの照明'
@@ -32,13 +33,19 @@ const devices = [
     willReportState: false,
     roomHint: 'リビング',
     attributes: {
-      commandOnlyOnOff: true
-    }
+      commandOnlyOnOff: true,
+
+      colorTemperatureRange: {
+        temperatureMinK: 2000,
+        temperatureMaxK: 5000
+      },
+      commandOnlyColorSetting: false
+}
   }]
 
 app.onSync((body, headers) => {
   console.log(headers)
-  console.log(body)
+  console.log(util.inspect(body, {depth: null}))
   return {
     requestId: body.requestId,
     payload: {
@@ -50,7 +57,7 @@ app.onSync((body, headers) => {
 
 app.onQuery((body, headers) => {
   console.log(headers)
-  console.log(body)
+  console.log(util.inspect(body, {depth: null}))
   return {
     requestId: body.requestId,
     payload: {
@@ -65,36 +72,63 @@ app.onQuery((body, headers) => {
 
 app.onExecute((body, headers) => {
   console.log(headers)
-  console.log(body)
-  const on = body.inputs[0].payload.commands[0].execution[0].params.on
-  if (on) {
-    commands.put({
-      command: 'light-on-full'
-    })
-  } else {
-    commands.put({
-      command: 'light-off'
-    })
-  }
-  return {
-    requestId: body.requestId,
-    payload: {
-      commands: [
-        {
-          ids: ['1'],
-          status: 'SUCCESS',
-          states: {
-            online: true
-          }
-        }
-      ]
+  console.log(util.inspect(body, {depth: null}))
+
+  var command
+  switch (body.inputs[0].payload.commands[0].execution[0].command) {
+    case "action.devices.commands.ColorAbsolute":
+      const temperature = body.inputs[0].payload.commands[0].execution[0].params.color.temperature
+      if(temperature > 3000) {
+        command = 'light-on-full'
+      } else {
+        command = 'light-on-scene'
+      }
+      break
+    case "action.devices.commands.BrightnessAbsolute":
+      const brightness = body.inputs[0].payload.commands[0].execution[0].params.brightness
+      if(brightness > 60) {
+        command = 'light-on-full'
+      } else if(brightness > 20){
+        command = 'light-on-scene'
+      } else if(brightness > 0) {
+        command = 'light-on-night'
+      } else {
+        command = 'light-off'
+      }
+      break
+  case "action.devices.commands.OnOff":
+    const on = body.inputs[0].payload.commands[0].execution[0].params.on
+    if (on) {
+      command = 'light-on-full'
+    } else {
+      command = 'light-off'
     }
   }
+
+  return commands.put({
+    command: command
+  }).then(() => {
+    return {
+      requestId: body.requestId,
+      payload: {
+        commands: [
+          {
+            ids: ['1'],
+            status: 'SUCCESS',
+            states: {
+              online: true
+            }
+          }
+        ]
+      }
+    }  
+  })
+
 })
 
 app.onDisconnect((body, headers) => {
   console.log(headers)
-  console.log(body)
+  console.log(util.inspect(body, {depth: null}))
   return {}
 })
 
