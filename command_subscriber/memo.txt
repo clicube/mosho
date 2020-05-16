@@ -1,7 +1,0 @@
-npm install
-npm rebuild --build-from-source grpc
-
-
-sudo cp mosho-command-subscriber.service /etc/systemd/system/
-sudo systemctl enable mosho-command-subscriber
-sudo systemctl start mosho-command-subscriber
