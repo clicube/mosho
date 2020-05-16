@@ -16,7 +16,7 @@ module.exports = (service, authConfig) => {
       brightness: Number(req.body.brightness)
     }
     const err = []
-    for (let key of Object.keys(docData)) {
+    for (const key of Object.keys(docData)) {
       if (isNaN(docData[key])) {
         err.push(key + ' is invalid')
       }
