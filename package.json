@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "firebase functions:config:set mosho.passcode=\"$MOSHO_PASSCODE\" mosho.basicauth=\"$MOSHO_BASIC_AUTH\" --project \"$FIREBASE_PROJECT_ID\" --runtime nodejs10; firebase deploy --token \"$FIREBASE_TOKEN\" --project \"$FIREBASE_PROJECT_ID\"",
+    "deploy": "firebase functions:config:set mosho.passcode=\"$MOSHO_PASSCODE\" mosho.basicauth=\"$MOSHO_BASIC_AUTH\" --project \"$FIREBASE_PROJECT_ID\"; firebase deploy --token \"$FIREBASE_TOKEN\" --project \"$FIREBASE_PROJECT_ID\"",
     "update": "npm-check-updates -u"
   },
   "repository": {
