@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "lint": "standard",
-    "fix": "standard --fix",
-    "deploy": "firebase functions:config:set mosho.passcode=\"$MOSHO_PASSCODE\" mosho.basicauth=\"$MOSHO_BASIC_AUTH\" --project \"$FIREBASE_PROJECT_ID\"; firebase deploy --token \"$FIREBASE_TOKEN\" --project \"$FIREBASE_PROJECT_ID\""
+    "deploy": "firebase functions:config:set mosho.passcode=\"$MOSHO_PASSCODE\" mosho.basicauth=\"$MOSHO_BASIC_AUTH\" --project \"$FIREBASE_PROJECT_ID\"; firebase deploy --token \"$FIREBASE_TOKEN\" --project \"$FIREBASE_PROJECT_ID\"",
+    "update": "npm-check-updates -u"
   },
   "repository": {
     "type": "git",
@@ -21,8 +19,7 @@
   "homepage": "https://github.com/clicube/mosho#readme",
   "dependencies": {},
   "devDependencies": {
-    "firebase-tools": "^6.3.1",
-    "jest": "^24.1.0",
-    "standard": "^12.0.1"
+    "firebase-tools": "^8.2.0",
+    "npm-check-updates": "^6.0.1"
   }
 }

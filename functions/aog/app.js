@@ -40,12 +40,12 @@ const devices = [
         temperatureMaxK: 5000
       },
       commandOnlyColorSetting: false
-}
+    }
   }]
 
 app.onSync((body, headers) => {
   console.log(headers)
-  console.log(util.inspect(body, {depth: null}))
+  console.log(util.inspect(body, { depth: null }))
   return {
     requestId: body.requestId,
     payload: {
@@ -57,7 +57,7 @@ app.onSync((body, headers) => {
 
 app.onQuery((body, headers) => {
   console.log(headers)
-  console.log(util.inspect(body, {depth: null}))
+  console.log(util.inspect(body, { depth: null }))
   return {
     requestId: body.requestId,
     payload: {
@@ -72,36 +72,39 @@ app.onQuery((body, headers) => {
 
 app.onExecute((body, headers) => {
   console.log(headers)
-  console.log(util.inspect(body, {depth: null}))
+  console.log(util.inspect(body, { depth: null }))
 
   var command
   switch (body.inputs[0].payload.commands[0].execution[0].command) {
-    case "action.devices.commands.ColorAbsolute":
+    case 'action.devices.commands.ColorAbsolute': {
       const temperature = body.inputs[0].payload.commands[0].execution[0].params.color.temperature
-      if(temperature > 3000) {
+      if (temperature > 3000) {
         command = 'light-on-full'
       } else {
         command = 'light-on-scene'
       }
       break
-    case "action.devices.commands.BrightnessAbsolute":
+    }
+    case 'action.devices.commands.BrightnessAbsolute': {
       const brightness = body.inputs[0].payload.commands[0].execution[0].params.brightness
-      if(brightness > 60) {
+      if (brightness > 60) {
         command = 'light-on-full'
-      } else if(brightness > 20){
+      } else if (brightness > 20) {
         command = 'light-on-scene'
-      } else if(brightness > 0) {
+      } else if (brightness > 0) {
         command = 'light-on-night'
       } else {
         command = 'light-off'
       }
       break
-  case "action.devices.commands.OnOff":
-    const on = body.inputs[0].payload.commands[0].execution[0].params.on
-    if (on) {
-      command = 'light-on-full'
-    } else {
-      command = 'light-off'
+    }
+    case 'action.devices.commands.OnOff': {
+      const on = body.inputs[0].payload.commands[0].execution[0].params.on
+      if (on) {
+        command = 'light-on-full'
+      } else {
+        command = 'light-off'
+      }
     }
   }
 
@@ -121,14 +124,13 @@ app.onExecute((body, headers) => {
           }
         ]
       }
-    }  
+    }
   })
-
 })
 
 app.onDisconnect((body, headers) => {
   console.log(headers)
-  console.log(util.inspect(body, {depth: null}))
+  console.log(util.inspect(body, { depth: null }))
   return {}
 })
 

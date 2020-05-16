@@ -6,7 +6,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     working_directory: ~/repo
     steps:
       - checkout
@@ -20,12 +20,12 @@ jobs:
           paths:
             - ~/.npm
           key: v1-dependencies-{{ checksum "package-lock.json" }}
-      - run: npm run test
-      - run: npm run lint
+      - run: cd functions; npm run test
+      - run: cd functions; npm run lint
 
   dev-deploy:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     working_directory: ~/repo
     steps:
       - checkout
