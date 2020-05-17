@@ -95,7 +95,8 @@ app.onExecute(async (body, headers) => {
         commandQueue.push('light-on-kutsurogi')
       } else if (brightness > 0) {
         commandQueue.push('light-on-kutsurogi')
-        commandQueue.push('light-on-memory-night')
+        // FIXME: 常夜灯点灯中は受信感度が下がるために無効化
+        // commandQueue.push('light-on-memory-night')
       } else {
         commandQueue.push('light-off')
       }
