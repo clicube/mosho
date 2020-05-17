@@ -70,62 +70,67 @@ app.onQuery((body, headers) => {
   }
 })
 
-app.onExecute((body, headers) => {
+app.onExecute(async (body, headers) => {
   console.log(headers)
   console.log(util.inspect(body, { depth: null }))
 
-  var command
+  const commandQueue = []
   switch (body.inputs[0].payload.commands[0].execution[0].command) {
     case 'action.devices.commands.ColorAbsolute': {
       const temperature = body.inputs[0].payload.commands[0].execution[0].params.color.temperature
       if (temperature > 3000) {
-        command = 'light-on-full'
+        commandQueue.push('light-on-full')
       } else {
-        command = 'light-on-scene'
+        commandQueue.push('light-on-scene')
       }
       break
     }
     case 'action.devices.commands.BrightnessAbsolute': {
       const brightness = body.inputs[0].payload.commands[0].execution[0].params.brightness
       if (brightness > 90) {
-        command = 'light-on-full'
+        commandQueue.push('light-on-full')
       } else if (brightness > 50) {
-        command = 'light-on-danran'
+        commandQueue.push('light-on-danran')
+      } else if (brightness > 20) {
+        commandQueue.push('light-on-kutsurogi')
       } else if (brightness > 0) {
-        command = 'light-on-kutsurogi'
+        commandQueue.push('light-on-kutsurogi')
+        commandQueue.push('light-on-memory-night')
       } else {
-        command = 'light-off'
+        commandQueue.push('light-off')
       }
       break
     }
     case 'action.devices.commands.OnOff': {
       const on = body.inputs[0].payload.commands[0].execution[0].params.on
       if (on) {
-        command = 'light-on-danran'
+        commandQueue.push('light-on-danran')
       } else {
-        command = 'light-off'
+        commandQueue.push('light-off')
       }
     }
   }
 
-  return commands.put({
-    command: command
-  }).then(() => {
-    return {
-      requestId: body.requestId,
-      payload: {
-        commands: [
-          {
-            ids: ['1'],
-            status: 'SUCCESS',
-            states: {
-              online: true
-            }
+  for (const i in commandQueue) {
+    await commands.put({
+      command: commandQueue[i]
+    })
+  }
+
+  return {
+    requestId: body.requestId,
+    payload: {
+      commands: [
+        {
+          ids: ['1'],
+          status: 'SUCCESS',
+          states: {
+            online: true
           }
-        ]
-      }
+        }
+      ]
     }
-  })
+  }
 })
 
 app.onDisconnect((body, headers) => {
