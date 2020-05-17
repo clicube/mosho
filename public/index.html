@@ -56,7 +56,6 @@
       font-size: 24px;
       margin: 30px 0;
     }
-
   </style>
   <script>
     $(function () {
@@ -64,14 +63,14 @@
 
       PullToRefresh.init({
         mainElement: 'body',
-        onRefresh: function(){ window.location.reload(); }
+        onRefresh: function () { window.location.reload(); }
       });
 
-      $.get(baseurl + '/api/v1/envs/latest', null, function(data) {
+      $.get(baseurl + '/api/v1/envs/latest', null, function (data) {
         console.log(data);
         $('#temp').html(data.temperature + ' &deg;C');
         $('#hum').html(data.humidity + ' %');
-        if(data.brightness > 15) {
+        if (data.brightness > 15) {
           $('body').addClass('light')
         } else {
           $('body').addClass('dark')
@@ -123,20 +122,28 @@
   <div id="control" class="text-center">
     <h2>エアコン</h2>
     <div class="btn-group btn-group-lg" role="group" aria-label="air">
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="air-on">自動</button>
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="air-on-cool-28">冷房28</button>
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="air-on-dry-28">除湿28</button>
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="air-off">オフ</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal"
+        data-command="air-on-28">28度</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal"
+        data-command="air-on-20">20度</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal"
+        data-command="air-off">オフ</button>
     </div>
     <h2>ライト</h2>
     <div class="btn-group btn-group-lg" role="group" aria-label="light">
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="light-on-full">全光</button>
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="light-on-scene">シーン</button>
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal" data-command="light-off">オフ</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal"
+        data-command="light-on-full">全光</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal"
+        data-command="light-on-danran">だんらん</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal"
+        data-command="light-on-kutsurogi">くつろぎ</button>
+      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#passcodeModal"
+        data-command="light-off">オフ</button>
     </div>
     <div id="result"></div>
   </div>
-  <div class="modal" id="passcodeModal" tabindex="-1" role="dialog" aria-labelledby="passcodeModalLabel" aria-hidden="true" data-show="true" data-keyboard="false" data-backdrop="static">
+  <div class="modal" id="passcodeModal" tabindex="-1" role="dialog" aria-labelledby="passcodeModalLabel"
+    aria-hidden="true" data-show="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -146,7 +153,8 @@
           <h4 class="modal-title">Enter Passcode</h4>
         </div><!-- /modal-header -->
         <div class="modal-body">
-          <input type="text" class="form-control" id="passcode" placeholder="Passcode" pattern="\d*" inputmode="numeric">
+          <input type="text" class="form-control" id="passcode" placeholder="Passcode" pattern="\d*"
+            inputmode="numeric">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

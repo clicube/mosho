@@ -87,12 +87,12 @@ app.onExecute((body, headers) => {
     }
     case 'action.devices.commands.BrightnessAbsolute': {
       const brightness = body.inputs[0].payload.commands[0].execution[0].params.brightness
-      if (brightness > 60) {
+      if (brightness > 90) {
         command = 'light-on-full'
-      } else if (brightness > 20) {
-        command = 'light-on-scene'
+      } else if (brightness > 50) {
+        command = 'light-on-danran'
       } else if (brightness > 0) {
-        command = 'light-on-night'
+        command = 'light-on-kutsurogi'
       } else {
         command = 'light-off'
       }
@@ -101,7 +101,7 @@ app.onExecute((body, headers) => {
     case 'action.devices.commands.OnOff': {
       const on = body.inputs[0].payload.commands[0].execution[0].params.on
       if (on) {
-        command = 'light-on-full'
+        command = 'light-on-danran'
       } else {
         command = 'light-off'
       }
