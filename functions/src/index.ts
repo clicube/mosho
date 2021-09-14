@@ -11,3 +11,5 @@ exports.aog = functions
   .runWith({ timeoutSeconds: 10 })
   .region('asia-northeast1')
   .https.onRequest(aog)
+
+//import * as functions from "firebase-functions";
