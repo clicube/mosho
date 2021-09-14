@@ -19,7 +19,7 @@
   "homepage": "https://github.com/clicube/mosho#readme",
   "dependencies": {},
   "devDependencies": {
-    "firebase-tools": "^8.2.0",
-    "npm-check-updates": "^6.0.1"
+    "firebase-tools": "^9.18.0",
+    "npm-check-updates": "^11.8.5"
   }
 }
