@@ -25,10 +25,10 @@ const devices = [
     traits: [
       'action.devices.traits.OnOff',
       'action.devices.traits.Brightness',
-      'action.devices.traits.ColorSetting'
+      'action.devices.traits.ColorSetting',
     ],
     name: {
-      name: 'リビングの照明'
+      name: 'リビングの照明',
     },
     willReportState: false,
     roomHint: 'リビング',
@@ -37,11 +37,12 @@ const devices = [
 
       colorTemperatureRange: {
         temperatureMinK: 2000,
-        temperatureMaxK: 5000
+        temperatureMaxK: 5000,
       },
-      commandOnlyColorSetting: false
-    }
-  }]
+      commandOnlyColorSetting: false,
+    },
+  },
+]
 
 app.onSync((body, headers) => {
   console.log(headers)
@@ -50,8 +51,8 @@ app.onSync((body, headers) => {
     requestId: body.requestId,
     payload: {
       agentUserId: 'dummy',
-      devices: devices
-    }
+      devices: devices,
+    },
   }
 })
 
@@ -63,10 +64,10 @@ app.onQuery((body, headers) => {
     payload: {
       devices: {
         1: {
-          online: true
-        }
-      }
-    }
+          online: true,
+        },
+      },
+    },
   }
 })
 
@@ -77,7 +78,8 @@ app.onExecute(async (body, headers) => {
   const commandQueue = []
   switch (body.inputs[0].payload.commands[0].execution[0].command) {
     case 'action.devices.commands.ColorAbsolute': {
-      const temperature = body.inputs[0].payload.commands[0].execution[0].params.color.temperature
+      const temperature =
+        body.inputs[0].payload.commands[0].execution[0].params.color.temperature
       if (temperature > 3000) {
         commandQueue.push('light-on-full')
       } else {
@@ -86,7 +88,8 @@ app.onExecute(async (body, headers) => {
       break
     }
     case 'action.devices.commands.BrightnessAbsolute': {
-      const brightness = body.inputs[0].payload.commands[0].execution[0].params.brightness
+      const brightness =
+        body.inputs[0].payload.commands[0].execution[0].params.brightness
       if (brightness > 90) {
         commandQueue.push('light-on-full')
       } else if (brightness > 50) {
@@ -114,7 +117,7 @@ app.onExecute(async (body, headers) => {
 
   for (const i in commandQueue) {
     await commands.put({
-      command: commandQueue[i]
+      command: commandQueue[i],
     })
   }
 
@@ -126,11 +129,11 @@ app.onExecute(async (body, headers) => {
           ids: ['1'],
           status: 'SUCCESS',
           states: {
-            online: true
-          }
-        }
-      ]
-    }
+            online: true,
+          },
+        },
+      ],
+    },
   }
 })
 

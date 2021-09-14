@@ -75,73 +75,68 @@ test('basicAuth rejects without basic auth header', async () => {
   expect(result.status).toBe(401)
 })
 
-test('passcodeOrBasicAuth accepts correct passcode without basic auth',
-  async () => {
-    // arrange
-    const app = createTestAppPassOrBasic()
+test('passcodeOrBasicAuth accepts correct passcode without basic auth', async () => {
+  // arrange
+  const app = createTestAppPassOrBasic()
 
-    // act
-    const result = await request(app).post('/').send('passcode=1111')
+  // act
+  const result = await request(app).post('/').send('passcode=1111')
 
-    // assert
-    expect(result.status).toBe(200)
-    expect(result.text).toBe('ok')
-  })
+  // assert
+  expect(result.status).toBe(200)
+  expect(result.text).toBe('ok')
+})
 
-test('passcodeOrBasicAuth accepts correct basic auth without passcode',
-  async () => {
-    // arrange
-    const app = createTestAppPassOrBasic()
+test('passcodeOrBasicAuth accepts correct basic auth without passcode', async () => {
+  // arrange
+  const app = createTestAppPassOrBasic()
 
-    // act
-    const result = await request(app).post('/').auth('name', 'pass')
+  // act
+  const result = await request(app).post('/').auth('name', 'pass')
 
-    // assert
-    expect(result.status).toBe(200)
-    expect(result.text).toBe('ok')
-  })
+  // assert
+  expect(result.status).toBe(200)
+  expect(result.text).toBe('ok')
+})
 
-test('passcodeOrBasicAuth rejects correct passcode with wrong basic auth',
-  async () => {
-    // arrange
-    const app = createTestAppPassOrBasic()
+test('passcodeOrBasicAuth rejects correct passcode with wrong basic auth', async () => {
+  // arrange
+  const app = createTestAppPassOrBasic()
 
-    // act
-    const result = await request(app)
-      .post('/')
-      .send('passcode=1111')
-      .auth('name', 'wrong-pass')
+  // act
+  const result = await request(app)
+    .post('/')
+    .send('passcode=1111')
+    .auth('name', 'wrong-pass')
 
-    // assert
-    expect(result.status).toBe(401)
-  })
+  // assert
+  expect(result.status).toBe(401)
+})
 
-test('passcodeOrBasicAuth rejects correct basic auth with wrong passcode',
-  async () => {
-    // arrange
-    const app = createTestAppPassOrBasic()
+test('passcodeOrBasicAuth rejects correct basic auth with wrong passcode', async () => {
+  // arrange
+  const app = createTestAppPassOrBasic()
 
-    // act
-    const result = await request(app)
-      .post('/')
-      .send('passcode=2222')
-      .auth('name', 'pass')
+  // act
+  const result = await request(app)
+    .post('/')
+    .send('passcode=2222')
+    .auth('name', 'pass')
 
-    // assert
-    expect(result.status).toBe(401)
-  })
+  // assert
+  expect(result.status).toBe(401)
+})
 
-test('passcodeOrBasicAuth rejects without basic auth and passcode',
-  async () => {
-    // arrange
-    const app = createTestAppPassOrBasic()
+test('passcodeOrBasicAuth rejects without basic auth and passcode', async () => {
+  // arrange
+  const app = createTestAppPassOrBasic()
 
-    // act
-    const result = await request(app)
-      .post('/')
-      .send('passcode=2222')
-      .auth('name', 'pass')
+  // act
+  const result = await request(app)
+    .post('/')
+    .send('passcode=2222')
+    .auth('name', 'pass')
 
-    // assert
-    expect(result.status).toBe(401)
-  })
+  // assert
+  expect(result.status).toBe(401)
+})

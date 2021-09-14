@@ -17,6 +17,6 @@ module.exports = (db) => {
     delete: async (id) => {
       const cmdsToDelete = await cmdsRef.where('id', '==', id).get()
       cmdsToDelete.forEach((cmd) => cmd.ref.delete())
-    }
+    },
   }
 }

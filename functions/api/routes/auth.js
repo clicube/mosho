@@ -19,8 +19,7 @@ module.exports = (config) => {
   }
 
   const fail = (res) => {
-    return res.status(401)
-      .send({ result: 'NG', message: 'Unauthorized' })
+    return res.status(401).send({ result: 'NG', message: 'Unauthorized' })
   }
 
   return {
@@ -41,6 +40,6 @@ module.exports = (config) => {
       } else {
         return next()
       }
-    }
+    },
   }
 }
