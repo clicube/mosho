@@ -3,7 +3,6 @@
 const envs = require('./envs')
 const request = require('supertest')
 const express = require('express')
-const bodyParser = require('body-parser')
 
 test('GET /latest returns latest data from service as JSON', async () => {
   // arrange
@@ -41,10 +40,9 @@ test('GET /latest returns 500 error when service occurs error', async () => {
   expect(result.status).toBe(500)
 })
 
-test('POST / with correct basic auth and data returns 200 and received data', async () => {
-  // arrange
+const createApp = () => {
   const app = express()
-  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(express.urlencoded({ extended: true }))
   const mockService = {
     put: async (data) => {
       return data
@@ -52,6 +50,12 @@ test('POST / with correct basic auth and data returns 200 and received data', as
   }
   const sut = envs(mockService, { name: 'name', pass: 'pass' })
   app.use(sut)
+  return app
+}
+
+test('POST / with correct basic auth and data returns 200 and received data', async () => {
+  // arrange
+  const app = createApp()
 
   // act
   const result = await request(app)
@@ -66,4 +70,46 @@ test('POST / with correct basic auth and data returns 200 and received data', as
   expect(parsedResult.temperature).toBe(22)
   expect(parsedResult.humidity).toBe(33)
   expect(parsedResult.brightness).toBe(44)
+})
+
+test('POST / with correct basic auth but wrong data returns 400 response', async () => {
+  // arrange
+  const app = createApp()
+
+  // act
+  const result = await request(app)
+    .post('/')
+    .auth('name', 'pass')
+    .send('time=xxx&temperature=22&humidity=33&brightness=44')
+
+  // assert
+  expect(result.status).toBe(400)
+})
+
+test('POST / with correct basic auth but insufficient data returns 400 response', async () => {
+  // arrange
+  const app = createApp()
+
+  // act
+  const result = await request(app)
+    .post('/')
+    .auth('name', 'pass')
+    .send('time=111&temperature=22&humidity=33')
+
+  // assert
+  expect(result.status).toBe(400)
+})
+
+test('POST / with wrong basic auth returns 401 response', async () => {
+  // arrange
+  const app = createApp()
+
+  // act
+  const result = await request(app)
+    .post('/')
+    .auth('name', 'wrong-pass')
+    .send('time=11111111&temperature=22&humidity=33&brightness=44')
+
+  // assert
+  expect(result.status).toBe(401)
 })

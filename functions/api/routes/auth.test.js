@@ -3,11 +3,10 @@
 const auth = require('./auth')
 const request = require('supertest')
 const express = require('express')
-const bodyParser = require('body-parser')
 
 const createTestApp = (testAuth) => {
   const app = express()
-  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(express.urlencoded({ extended: true }))
   app.use(testAuth)
   app.get('/', (req, res) => {
     res.send('ok')
@@ -132,10 +131,7 @@ test('passcodeOrBasicAuth rejects without basic auth and passcode', async () => 
   const app = createTestAppPassOrBasic()
 
   // act
-  const result = await request(app)
-    .post('/')
-    .send('passcode=2222')
-    .auth('name', 'pass')
+  const result = await request(app).post('/')
 
   // assert
   expect(result.status).toBe(401)
