@@ -13,7 +13,7 @@ module.exports = (service, authConfig) => {
       time: Number(req.body.time),
       temperature: Number(req.body.temperature),
       humidity: Number(req.body.humidity),
-      brightness: Number(req.body.brightness)
+      brightness: Number(req.body.brightness),
     }
     const err = []
     for (const key of Object.keys(docData)) {

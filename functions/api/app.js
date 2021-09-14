@@ -21,7 +21,7 @@ const authConfig = (() => {
   return {
     name: name,
     pass: pass,
-    passcode: passcode
+    passcode: passcode,
   }
 })()
 

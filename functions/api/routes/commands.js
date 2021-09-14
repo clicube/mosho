@@ -10,7 +10,7 @@ module.exports = (service, authConfig) => {
 
   router.post('/', auth.passcodeOrBasicAuth, async (req, res) => {
     const docData = {
-      command: req.body.command
+      command: req.body.command,
     }
     if (docData.command === undefined) {
       return res.status(400).send({ result: 'NG', message: 'Bad Request' })

@@ -7,7 +7,7 @@ test('getLatest() returns latest data from repository', async () => {
   const mockRepo = {
     getLatest: async () => {
       return 'latestData'
-    }
+    },
   }
   const sut = envs(mockRepo)
 
@@ -23,7 +23,7 @@ test('getLatest() raises error when repository occurs error', async () => {
   const mockRepo = {
     getLatest: async () => {
       throw new Error()
-    }
+    },
   }
   const sut = envs(mockRepo)
 
