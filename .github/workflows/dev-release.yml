@@ -1,0 +1,29 @@
+name: dev release
+
+on:
+  push:
+    branches:
+      - dev-release
+
+jobs:
+  dev-release:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: "npm"
+      - run: npm ci
+        working-directory: ./
+      - run: npm ci
+        working-directory: ./functions
+      - run: npm run deploy
+        working-directory: ./
+        env:
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          MOSHO_BASIC_AUTH: ${{ secrets.MOSHO_BASIC_AUTH }}
+          MOSHO_PASSCODE: ${{ secrets.MOSHO_PASSCODE }}

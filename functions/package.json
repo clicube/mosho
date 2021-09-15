@@ -8,8 +8,8 @@
     "logs": "firebase functions:log",
     "test": "jest",
     "lint": "eslint ./src && prettier --check ./src",
-    "update": "npm-check-updates -u",
-    "build": "npm run lint && tsc"
+    "build": "tsc",
+    "update": "npm-check-updates -u"
   },
   "dependencies": {
     "actions-on-google": "^3.0.0",
