@@ -44,6 +44,14 @@ resource "aws_iam_policy" "lambda_api" {
             "logs:CreateLogStream"
           ],
           "Resource": "arn:aws:logs:*:*:log-group:/aws/lambda/*"
+        },
+        {
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:Query",
+            "dynamodb:PutItem"
+          ],
+          "Resource": "arn:aws:dynamodb:*:${data.aws_caller_identity.self.account_id}:table/mosho-${var.env}-ddb-envs"
         }
       ]
     }

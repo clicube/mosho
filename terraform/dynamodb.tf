@@ -1,11 +1,11 @@
 resource "aws_dynamodb_table" "envs_data" {
-  name         = "mosho-${var.env}-ddb-envs_data"
+  name         = "mosho-${var.env}-ddb-envs"
   billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "uid"
+  hash_key     = "location"
   range_key    = "timestamp"
 
   attribute {
-    name = "uid"
+    name = "location"
     type = "S"
   }
 
