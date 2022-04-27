@@ -28,7 +28,6 @@ export const dynamoDbTable = <T>(tableName: string): Table<T> => {
 
   return {
     query: async (options) => {
-      console.log(createExpressionOptions(options));
       const res = await docClient.send(
         new QueryCommand({
           TableName: tableName,

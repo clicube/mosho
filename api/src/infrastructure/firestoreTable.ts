@@ -5,7 +5,6 @@ import { Table } from "../adapters/gateway/interfaces/Table";
 const credential = JSON.parse(
   process.env["FIREBASE_CREDENTIAL"] as string
 ) as ServiceAccount;
-console.log(Object.keys(credential));
 admin.initializeApp({
   credential: admin.credential.cert(credential),
 });
