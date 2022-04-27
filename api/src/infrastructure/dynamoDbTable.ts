@@ -4,7 +4,7 @@ import {
   PutCommand,
   QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
-import { QueryOptions, Table } from "../adapters/gateway/envDataRepository";
+import { QueryOptions, Table } from "../adapters/gateway/interfaces/Table";
 
 const createExpressionOptions = (options: QueryOptions) => {
   // const attrValue =

@@ -4,6 +4,10 @@ data "archive_file" "lambda_api" {
   output_path = "out/api.zip"
 }
 
+data "aws_ssm_parameter" "firebase_credential" {
+  name = "mosho-${var.env}-param-firebase_credential"
+}
+
 resource "aws_iam_role" "lambda_api" {
   name = "mosho-${var.env}-role-lambda_api"
 
@@ -78,4 +82,11 @@ resource "aws_lambda_function" "api" {
   role             = aws_iam_role.lambda_api.arn
   handler          = "index.handler"
   runtime          = "nodejs14.x"
+  timeout          = 20
+
+  environment {
+    variables = {
+      FIREBASE_CREDENTIAL = data.aws_ssm_parameter.firebase_credential.value
+    }
+  }
 }

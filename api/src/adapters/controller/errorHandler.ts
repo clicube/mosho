@@ -1,7 +1,7 @@
 import { Response } from "./Controller";
 
 export const errorHandler = (error: Error, statusCode = 500): Response => {
-  return {
+  const response = {
     statusCode,
     body: {
       error: error.name,
@@ -9,4 +9,6 @@ export const errorHandler = (error: Error, statusCode = 500): Response => {
       ...(error.stack ? { stack: error.stack.split("\n") } : {}),
     },
   };
+  console.log(response);
+  return response;
 };

@@ -1,18 +1,6 @@
 import { EnvData } from "../../domain/EnvData";
 import { EnvDataRepository } from "../../usecases/interfaces/EnvDataRepository";
-
-export type QueryOptions = {
-  conditionKey: string;
-  conditionValue: string | number;
-  orderBy?: string;
-  order?: "asc" | "desc";
-  limit?: number;
-};
-
-export interface Table<T> {
-  query(options: QueryOptions): Promise<T[]>;
-  put(value: T): Promise<void>;
-}
+import { Table } from "./interfaces/Table";
 
 export type DbEnvData = {
   location: string;

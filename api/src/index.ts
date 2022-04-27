@@ -1,6 +1,9 @@
+import { DbCommandData } from "./adapters/gateway/commandGateway";
 import { DbEnvData } from "./adapters/gateway/envDataRepository";
 import { dynamoDbTable } from "./infrastructure/dynamoDbTable";
+import { firestoreTable } from "./infrastructure/firestoreTable";
 import * as lambda from "./infrastructure/lambda";
 
-const table = dynamoDbTable<DbEnvData>("mosho-prd-ddb-envs");
-export const handler = lambda.handler(table);
+const envTable = dynamoDbTable<DbEnvData>("mosho-prd-ddb-envs");
+const commandTable = firestoreTable<DbCommandData>("commands");
+export const handler = lambda.handler(envTable, commandTable);
