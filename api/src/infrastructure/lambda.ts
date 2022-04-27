@@ -59,7 +59,6 @@ export const handler: (
   return async (event, context, ...args) => {
     const method = event.requestContext.http.method;
     const path = event.requestContext.http.path;
-    console.log(event);
 
     if (path === "/aog") {
       try {

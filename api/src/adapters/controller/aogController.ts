@@ -6,11 +6,14 @@ import {
   SmartHomeV1ExecuteResponse,
   SmartHomeV1QueryRequest,
   SmartHomeV1QueryResponse,
+  SmartHomeV1SyncDevices,
   SmartHomeV1SyncRequest,
   SmartHomeV1SyncResponse,
 } from "actions-on-google";
 import { Command } from "../../domain/Command";
+import { Device } from "../../domain/Device";
 import { executeCommand } from "../../usecases/executeCommand";
+import { getDevices } from "../../usecases/getDevices";
 import { CommandGateway } from "../../usecases/interfaces/CommandGateway";
 
 interface AogController {
@@ -26,37 +29,9 @@ interface AogController {
   >;
 }
 
-const devices = [
-  {
-    id: "1",
-    type: "action.devices.types.LIGHT",
-    traits: [
-      "action.devices.traits.OnOff",
-      "action.devices.traits.Brightness",
-      "action.devices.traits.ColorSetting",
-    ],
-    name: {
-      name: "リビングの照明",
-      defaultNames: ["リビングの照明"],
-      nicknames: ["リビングの照明"],
-    },
-    willReportState: false,
-    roomHint: "リビング",
-    attributes: {
-      commandOnlyOnOff: true,
-      colorTemperatureRange: {
-        temperatureMinK: 2000,
-        temperatureMaxK: 5000,
-      },
-      commandOnlyColorSetting: false,
-    },
-  },
-];
-
 const createCommand = (
   body: SmartHomeV1ExecuteRequest
 ): Command | undefined => {
-  console.log(body);
   const execution = body.inputs[0].payload.commands[0].execution[0];
   switch (execution.command) {
     case "action.devices.commands.OnOff":
@@ -83,13 +58,38 @@ const createCommand = (
   return undefined;
 };
 
+const deviceToAogDevice = (device: Device): SmartHomeV1SyncDevices => ({
+  id: device.id.toString(),
+  type: "action.devices.types.LIGHT",
+  name: {
+    name: device.name,
+    defaultNames: [device.name],
+    nicknames: [device.name],
+  },
+  traits: [
+    "action.devices.traits.OnOff",
+    "action.devices.traits.Brightness",
+    "action.devices.traits.ColorSetting",
+  ],
+  willReportState: false,
+  roomHint: device.location,
+  attributes: {
+    commandOnlyOnOff: true,
+    colorTemperatureRange: {
+      temperatureMinK: 2000,
+      temperatureMaxK: 5000,
+    },
+    commandOnlyColorSetting: false,
+  },
+});
+
 export const aogController = (gateway: CommandGateway): AogController => ({
   onSync: (body) => {
     return {
       requestId: body.requestId,
       payload: {
         agentUserId: "dummy",
-        devices: devices,
+        devices: getDevices().map(deviceToAogDevice),
       },
     };
   },
@@ -97,11 +97,10 @@ export const aogController = (gateway: CommandGateway): AogController => ({
     return {
       requestId: body.requestId,
       payload: {
-        devices: {
-          1: {
-            online: true,
-          },
-        },
+        devices: getDevices().reduce(
+          (map, d) => (map[d.id] = { online: true }),
+          {} as Record<number, { online: boolean }>
+        ),
       },
     };
   },
@@ -113,7 +112,7 @@ export const aogController = (gateway: CommandGateway): AogController => ({
         payload: {
           commands: [
             {
-              ids: ["1"],
+              ids: body.inputs[0].payload.commands[0].devices.map((d) => d.id),
               status: "ERROR",
               states: {
                 online: true,
@@ -129,7 +128,7 @@ export const aogController = (gateway: CommandGateway): AogController => ({
       payload: {
         commands: [
           {
-            ids: ["1"],
+            ids: body.inputs[0].payload.commands[0].devices.map((d) => d.id),
             status: "SUCCESS",
             states: {
               online: true,

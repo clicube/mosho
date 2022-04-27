@@ -6,6 +6,7 @@ export const getDevices = () => {
       id: 1,
       type: "light",
       name: "リビングのライト",
+      location: "リビング",
     },
   ];
   return devices;
