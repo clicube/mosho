@@ -23,12 +23,9 @@ const parseNumber = (value: unknown): number | undefined =>
 const parseDate = (value: unknown): Date | undefined =>
   isNumber(value) ? new Date(value * 1000) : undefined;
 
-const convertPostDataToEntity = (
-  data: unknown,
-  location: string
-): EnvData | ParseError => {
+const convertPostDataToEntity = (data: unknown, location: string): EnvData => {
   if (data === undefined) {
-    return new ParseError("data is empty");
+    throw new ParseError("data is empty");
   }
   const postData = data as Partial<PostData>;
 
@@ -46,20 +43,22 @@ const convertPostDataToEntity = (
       temperature: temperature!,
       humidity: humidity!,
       brightness: brightness!,
-      location,
+      location: location ?? "home.living_room",
     };
     /* eslint-enable @typescript-eslint/no-non-null-assertion */
   }
-  return new ParseError(`Invalid data: ${JSON.stringify(postData)}`);
+  throw new ParseError(`Invalid data: ${JSON.stringify(postData)}`);
 };
 
 const postData = async (
   data: Request,
   repo: EnvDataRepository
 ): Promise<Response> => {
-  const envData = convertPostDataToEntity(data.body, "home.living_room");
-  if (envData instanceof ParseError) {
-    return errorHandler(envData, 400);
+  let envData: EnvData;
+  try {
+    envData = convertPostDataToEntity(data.body, "home.living_room");
+  } catch (e) {
+    return errorHandler(e as Error, 400);
   }
   await saveEnvData(envData, repo);
   return { body: { result: "ok" } };
@@ -68,7 +67,7 @@ const postData = async (
 const getLatestData = async (repo: EnvDataRepository): Promise<Response> => {
   const data = await getLatestEnvData("home.living_room", repo);
   if (data === undefined) {
-    return errorHandler(new Error("No Data"));
+    return errorHandler(new Error("No Data"), 400);
   }
   return {
     body: {

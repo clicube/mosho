@@ -1,6 +1,10 @@
 resource "aws_apigatewayv2_api" "api" {
   name          = "mosho-${var.env}-api-api"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_origins = ["https://mosho-prd-web.s3.ap-northeast-1.amazonaws.com"]
+    allow_methods = ["GET", "POST", "OPTIONS"]
+  }
 }
 
 resource "aws_apigatewayv2_integration" "api" {

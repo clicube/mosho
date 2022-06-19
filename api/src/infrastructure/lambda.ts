@@ -4,6 +4,7 @@ import {
   APIGatewayProxyResultV2,
 } from "aws-lambda/trigger/api-gateway-proxy";
 import { envsRestController } from "../adapters/controller/envsRestController";
+import { commandsRestController } from "../adapters/controller/commandsRestController";
 import { errorHandler } from "../adapters/controller/errorHandler";
 import {
   DbEnvData,
@@ -36,6 +37,7 @@ export const handler: (
   commandTable: Table<DbCommandData>
 ) => APIGatewayProxyHandlerV2 = (envTable, commandTable) => {
   const cmdGw = commandGateway(commandTable);
+
   const aog = aogController(cmdGw);
 
   const smarthomeHandler = smarthome();
@@ -47,6 +49,8 @@ export const handler: (
   const envsRepo = envDataRepository(envTable);
   const envsController = envsRestController(envsRepo);
 
+  const commandsController = commandsRestController(cmdGw);
+
   const routes = [
     {
       method: "GET",
@@ -54,6 +58,7 @@ export const handler: (
       handler: envsController.getLatestData,
     },
     { method: "POST", path: "/envs", handler: envsController.postData },
+    { method: "POST", path: "/commands", handler: commandsController.postData },
   ];
 
   return async (event, context, ...args) => {
@@ -69,6 +74,10 @@ export const handler: (
         const res = errorHandler(e as Error);
         return createResponse(res.statusCode ?? 500, res.body);
       }
+    }
+
+    if (method === "OPTIONS") {
+      return createResponse(200, {});
     }
 
     const route = routes.find((r) => r.method === method && r.path === path);

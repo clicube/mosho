@@ -1,3 +1,4 @@
 {
-  "eslint.workingDirectories": ["api"]
+  "eslint.workingDirectories": ["api"],
+  "cSpell.words": ["smarthome"]
 }
