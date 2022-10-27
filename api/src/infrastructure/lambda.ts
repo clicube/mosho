@@ -67,17 +67,16 @@ export const handler: (
 
     if (path === "/aog") {
       try {
-        return await (smarthomeHandler(event, context, ...args) as Promise<
+        console.log({ event });
+        const res = await (smarthomeHandler(event, context, ...args) as Promise<
           APIGatewayProxyResultV2<never>
         >);
+        console.log({ res });
+        return res;
       } catch (e) {
         const res = errorHandler(e as Error);
         return createResponse(res.statusCode ?? 500, res.body);
       }
-    }
-
-    if (method === "OPTIONS") {
-      return createResponse(200, {});
     }
 
     const route = routes.find((r) => r.method === method && r.path === path);

@@ -3,7 +3,8 @@ resource "aws_apigatewayv2_api" "api" {
   protocol_type = "HTTP"
   cors_configuration {
     allow_origins = ["https://mosho-prd-web.s3.ap-northeast-1.amazonaws.com"]
-    allow_methods = ["GET", "POST", "OPTIONS"]
+    allow_methods = ["*"]
+    allow_headers = ["*"]
   }
 }
 
@@ -16,8 +17,9 @@ resource "aws_apigatewayv2_integration" "api" {
 }
 
 resource "aws_apigatewayv2_route" "api" {
+  for_each  = toset(["GET", "POST", "PUT", "DELETE", "PATCH"])
   api_id    = aws_apigatewayv2_api.api.id
-  route_key = "ANY /{proxy+}"
+  route_key = "${each.value} /{proxy+}"
   target    = "integrations/${aws_apigatewayv2_integration.api.id}"
 }
 

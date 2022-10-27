@@ -22,7 +22,7 @@ const parseBody = (body: unknown): PostData => {
     throw new Error("body is empty");
   }
   const data = body as Partial<PostData>;
-  if (typeof data.command !== "string" || typeof data.passcode === "string") {
+  if (typeof data.command !== "string" || typeof data.passcode !== "string") {
     throw new Error("Invalid data");
   }
   return data as PostData;

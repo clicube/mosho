@@ -85,6 +85,7 @@ const deviceToAogDevice = (device: Device): SmartHomeV1SyncDevices => ({
 
 export const aogController = (gateway: CommandGateway): AogController => ({
   onSync: (body) => {
+    console.log("onSync", body);
     return {
       requestId: body.requestId,
       payload: {
@@ -94,6 +95,7 @@ export const aogController = (gateway: CommandGateway): AogController => ({
     };
   },
   onQuery: (body) => {
+    console.log("onQuery", body);
     return {
       requestId: body.requestId,
       payload: {
@@ -105,6 +107,7 @@ export const aogController = (gateway: CommandGateway): AogController => ({
     };
   },
   onExecute: async (body) => {
+    console.log("onExecute", body);
     const command = createCommand(body);
     if (command === undefined) {
       return {
@@ -139,6 +142,7 @@ export const aogController = (gateway: CommandGateway): AogController => ({
     };
   },
   onDisconnect: () => {
+    console.log("onDisconnect");
     return {};
   },
 });

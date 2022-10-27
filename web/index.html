@@ -99,9 +99,11 @@
           }),
           contentType: 'application/json',
           success: function (data) {
-            console.log(data);
-            $('#result').html(data.message);
-            $('#passcodeModal').modal('hide');
+            var msg = $('<p><span class="label label-success">OK</span></p>');
+            $('#result').append(msg)
+            setTimeout(function () {
+              msg.remove();
+            }, 5000);
           }
         });
 
