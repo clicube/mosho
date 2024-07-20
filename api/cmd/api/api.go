@@ -2,32 +2,42 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-lambda-go/lambdacontext"
+
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
+	"github.com/gin-gonic/gin"
+
+	ginzap "github.com/gin-contrib/zap"
 	"go.uber.org/zap"
 )
 
 var logger *zap.Logger
+var ginLambda *ginadapter.GinLambdaV2
 
-func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	lc, _ := lambdacontext.FromContext(ctx)
-	logger.Debug("HandleRequest", zap.Any("context", lc))
-	return events.APIGatewayProxyResponse{
-		StatusCode: 200,
-		Headers: map[string]string{
-			"content-type": "application/json",
-		},
-		Body: json.Marshal(nil),
-	}, nil
+func init() {
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+
+	r := gin.Default()
+	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
+	r.Use(ginzap.RecoveryWithZap(logger, true))
+
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+
+	ginLambda = ginadapter.NewV2(r)
+}
+
+func Handler(ctx context.Context, req events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
+	return ginLambda.ProxyWithContext(ctx, req)
 }
 
 func main() {
-	lambda.Start(HandleRequest)
-}
-
-func init() {
-	logger, _ = zap.NewProduction()
+	lambda.Start(Handler)
 }

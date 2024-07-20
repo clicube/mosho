@@ -1,5 +1,6 @@
 build:
-	cd api && npm run build
+	cd api && go build -o out/api main
+	# cd api && npm run build
 
 plan-tf:
 	cd terraform && AWS_PROFILE=mosho-prd TF_VAR_env=prd terraform plan
